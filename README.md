@@ -200,12 +200,20 @@ A malformed or missing config file is not an error; the defaults stand.
 
 ```bash
 npm install
-npm test        # 38 unit tests over the predicates, guards and context hygiene
+npm test         # 57 tests: 38 unit + 19 integration
 npm run typecheck
 ```
 
 Detection, guards and context hygiene live in `detect.ts` as pure functions with no pi imports, so
-they are testable without a running agent. `index.ts` is only the wiring.
+they are testable without a running agent (`detect.test.ts`, built from real captured payloads).
+`index.ts` is only the wiring, and `index.test.ts` drives it through a fake pi host to check that the
+events are connected to the right decisions — a stall on `agent_settled` triggers exactly one turn,
+each guard suppresses it, and the retry cap releases after a healthy turn.
+
+Note that the suite calls the real `loadConfig()`, so it reads
+`~/.pi/agent/stall-recovery.json` if you have one. The assertions that depend on configuration are
+pinned with the `PI_STALL_RECOVERY*` env overrides, but a local config that disables
+`recoverMalformedToolCalls` would turn that one test red.
 
 ## License
 
