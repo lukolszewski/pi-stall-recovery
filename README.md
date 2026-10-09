@@ -104,6 +104,7 @@ A detected stall is only acted on when all of these hold:
 
 | Guard | Why |
 |---|---|
+| not running under `--print` | one-shot mode tears the session down after the turn (see below) |
 | user has not aborted | you pressed stop; stay stopped |
 | no queued user message | your message wins over an automatic retry |
 | pi is idle | another extension may have started a run |
@@ -111,6 +112,17 @@ A detected stall is only acted on when all of these hold:
 | context below the ceiling (default 95%) | a bare `stop` at a full window is exhaustion, not this bug — let compaction handle it |
 
 The cap counts *consecutive* stalls: any turn that produces real output resets it.
+
+### `--print` mode is detect-only
+
+In `pi --print` / `-p`, pi runs one prompt and replaces the session immediately. A turn triggered
+from `agent_settled` therefore lands on a session that is already gone, and pi reports
+`This extension ctx is stale after session replacement`. Verified against pi 0.84.4: the identical
+trigger succeeds in `tui` mode and fails in `print`.
+
+So under `--print` a stall is detected and logged but not retried — better a quiet unfinished run
+than an extension error on top of it. Interactive (`tui`), `rpc` and `json` modes recover normally.
+If you drive pi non-interactively and need recovery there, retry at the layer that invokes pi.
 
 ## How it resumes
 
@@ -200,9 +212,13 @@ A malformed or missing config file is not an error; the defaults stand.
 
 ```bash
 npm install
-npm test         # 57 tests: 38 unit + 19 integration
+npm test         # 63 tests: 43 unit + 20 integration
 npm run typecheck
 ```
+
+The live runtime was also checked by driving pi through a pty, which is how the `--print` limitation
+above was found: a forced trigger runs a second turn in `tui` mode, the real extension stays silent
+on a healthy turn, and `/stall-recovery` reports its counters.
 
 Detection, guards and context hygiene live in `detect.ts` as pure functions with no pi imports, so
 they are testable without a running agent (`detect.test.ts`, built from real captured payloads).

@@ -88,6 +88,7 @@ export default function (pi: ExtensionAPI) {
 		if (!kind || !lastAssistant) return
 
 		const verdict = checkGuards({
+			mode: ctx.mode,
 			isIdle: ctx.isIdle(),
 			hasPendingMessages: ctx.hasPendingMessages(),
 			aborted: ctx.signal?.aborted === true,

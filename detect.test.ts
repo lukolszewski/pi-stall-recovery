@@ -179,6 +179,7 @@ describe("hasReasoningOnlyFingerprint", () => {
 
 describe("checkGuards", () => {
 	const base: GuardFacts = {
+		mode: "tui",
 		isIdle: true,
 		hasPendingMessages: false,
 		aborted: false,
@@ -190,6 +191,16 @@ describe("checkGuards", () => {
 
 	it("allows a first recovery when parked and idle", () => {
 		expect(checkGuards(base)).toEqual({ ok: true })
+	})
+
+	it("refuses in print mode, where the session is torn down after the turn", () => {
+		const v = checkGuards({ ...base, mode: "print" })
+		expect(v.ok).toBe(false)
+		expect((v as { reason: string }).reason).toMatch(/print mode/)
+	})
+
+	it.each(["tui", "rpc", "json", undefined])("acts in %s mode", (mode) => {
+		expect(checkGuards({ ...base, mode })).toEqual({ ok: true })
 	})
 
 	it("refuses when the user aborted", () => {

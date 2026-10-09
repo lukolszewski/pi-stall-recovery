@@ -116,6 +116,8 @@ export function staleNudgeIndices(
 }
 
 export interface GuardFacts {
+	/** pi's run mode: "tui" | "rpc" | "json" | "print". */
+	mode?: string
 	/** pi is genuinely parked — nothing queued, nothing running. */
 	isIdle: boolean
 	/** The user already typed something; their message wins over our retry. */
@@ -138,6 +140,12 @@ export type GuardVerdict = { ok: true } | { ok: false; reason: string }
  * "is this a stall" and "may we act" questions can be tested independently.
  */
 export function checkGuards(f: GuardFacts): GuardVerdict {
+	// `--print` runs one prompt and tears the session down immediately, so a turn
+	// triggered from `agent_settled` lands on a replaced session and pi reports
+	// "This extension ctx is stale after session replacement". Verified against
+	// pi 0.84.4: the same trigger succeeds in `tui` mode and fails in `print`.
+	// Declining keeps a non-interactive run quiet instead of surfacing that error.
+	if (f.mode === "print") return { ok: false, reason: "print mode ends the session after the turn" }
 	if (f.aborted) return { ok: false, reason: "aborted by user" }
 	if (f.hasPendingMessages) return { ok: false, reason: "user message already queued" }
 	if (!f.isIdle) return { ok: false, reason: "another run is already active" }

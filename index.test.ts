@@ -53,6 +53,7 @@ class FakePi {
 
 function makeCtx(over: Partial<Record<string, any>> = {}) {
 	return {
+		mode: over.mode ?? "tui",
 		isIdle: () => over.isIdle ?? true,
 		hasPendingMessages: () => over.hasPendingMessages ?? false,
 		signal: over.signal,
@@ -141,6 +142,7 @@ describe("guards suppress the retry", () => {
 		["queued user message", { hasPendingMessages: true }],
 		["another run active", { isIdle: false }],
 		["context at the ceiling", { contextUsage: { tokens: 260_000, contextWindow: 262_144 } }],
+		["running in print mode", { mode: "print" }],
 	])("declines when %s", async (_name, over) => {
 		await settleWith(STALL, makeCtx(over))
 		expect(pi.triggered).toBe(0)
