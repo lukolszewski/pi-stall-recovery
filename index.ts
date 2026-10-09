@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Lukasz Olszewski
+
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent"
 import { loadConfig, type StallRecoveryConfig } from "./config.ts"
 import {

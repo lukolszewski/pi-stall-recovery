@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Lukasz Olszewski
+
 import { describe, expect, it } from "vitest"
 import { DEFAULT_CONFIG, parseConfig } from "./config.ts"
 import {

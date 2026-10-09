@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Lukasz Olszewski
+
 /**
  * Pure detection logic, deliberately free of any pi imports so it can be unit
  * tested without a running agent. `index.ts` adapts pi's real types onto the

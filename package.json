@@ -2,7 +2,7 @@
   "name": "pi-stall-recovery",
   "version": "0.1.0",
   "type": "module",
-  "description": "Recover the pi coding agent from silent model stalls — turns that end with no message and no tool call while the task is unfinished.",
+  "description": "Recover the pi coding agent from silent model stalls \u2014 turns that end with no message and no tool call while the task is unfinished.",
   "keywords": [
     "pi-package",
     "pi-coding-agent",
@@ -11,7 +11,7 @@
     "llama.cpp",
     "agent"
   ],
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "author": "Lukasz Olszewski",
   "repository": {
     "type": "git",

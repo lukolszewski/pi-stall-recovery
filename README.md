@@ -233,4 +233,8 @@ pinned with the `PI_STALL_RECOVERY*` env overrides, but a local config that disa
 
 ## License
 
-MIT
+GPL-3.0-or-later. Copyright (C) 2026 Lukasz Olszewski. See [LICENSE](LICENSE).
+
+This is free software: you may redistribute and modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation, either version 3 of the License, or (at your
+option) any later version. It comes with ABSOLUTELY NO WARRANTY.

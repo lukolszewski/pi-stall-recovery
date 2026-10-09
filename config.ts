@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Lukasz Olszewski
+
 import { readFileSync } from "node:fs"
 import { homedir } from "node:os"
 import { join } from "node:path"
